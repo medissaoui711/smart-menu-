@@ -1,0 +1,65 @@
+# Tutti AI Agent Guidelines & Project Specification
+# File: tutti.toml
+# Description: Configuration and guidelines file for AI models reading and modifying this codebase.
+
+[project_info]
+name = "Smart Restaurant & Cafe Digital Menu with WhatsApp Ordering"
+description = "نظام قائمة طعام رقمية تفاعلية للمطاعم والمقاهي مع دعم الطلب عبر الواتساب وإنشاء كروت وستاندات QR/NFC ولوحة تحكم كاملة."
+version = "1.0.0"
+primary_language = "ar"
+supported_languages = ["ar", "en"]
+
+[tech_stack]
+framework = "React 18 (TypeScript)"
+styling = "Tailwind CSS v4 (@import 'tailwindcss' in index.css)"
+bundler = "Vite"
+icons = "lucide-react"
+animations = "motion / framer-motion"
+qr_nfc = "qrcode.react, Web NFC API"
+printing = "react-to-print, CSS print media queries"
+state_management = "React Custom Hooks (useMenuState, useCartState, useLanguage, usePWA, useAppInitialization) + LocalStorage Persistence"
+
+[architecture]
+types = "src/types.ts (All data models: MenuItem, Category, CartItem, RestaurantConfig, etc.)"
+components_dir = "src/components/"
+hooks_dir = "src/hooks/"
+data_dir = "src/data/"
+utils_dir = "src/utils/"
+
+[components_map]
+Header = "شريط العناوين العلوي ومعلومات المطعم وتبديل اللغة"
+CategoryNav = "شريط تصنيفات الوجبات الأفقي التفاعلي"
+MenuContent = "شبكة عرض المنتجات والوجبات والبحث"
+MenuItemCard = "بطاقة الوجبة مع الصورة والسعر وزر الإضافة"
+CartDrawer = "سلة التسوق واختيار نوع الطلب (طاولة/توصيل/استلام) والحساب الإجمالي والطلب عبر الواتساب"
+ItemModal = "نافذة تفاصيل الوجبة والملاحظات والكمية"
+AdminPanel = "لوحة تحكم إدارية سريعة لترتيب وتعديل وإضافة الوجبات والأصناف وإعدادات المطعم والواتساب"
+QrStandGenerator = "مولد ستاندات وقواعد QR Code و NFC للطاولات جاهزة للطباعة"
+MobileBottomNav = "شريط التنقل السفلي المخصص لشاشات الهواتف المحمولة"
+MobileSidebarDrawer = "القائمة الجانبية للشاشات الكبيرة والمحمول"
+SEO = "إدارة البيانات الوصفية وهيكلة محركات البحث"
+
+[styling_rules]
+font_family = "'Cairo', 'Tajawal', sans-serif"
+design_system = "تصميم عصري تقني وأنيق مخصص للمطاعم مع ألوان دافئة ومستقرة"
+dark_mode_strategy = "تلقائي عبر CSS Variables وتفضيلات الجهاز @media (prefers-color-scheme: dark)"
+responsive_strategy = "Mobile-First (BottomNav على الجوال، Header & Sidebar على الشاشات الكبيرة)"
+
+[custom_css_classes]
+no_scrollbar = "إخفاء شريط التمرير للأشرطة الأفقية (.no-scrollbar)"
+no_print = "إخفاء العناصر أثناء طباعة ستاندات QR (.no-print)"
+print_only = "إظهار العناصر المخصصة للطباعة فقط (.print-only)"
+glassmorphic_blur = "خلفيات ضبابية شفافة باستخدام backdrop-blur-xs و backdrop-blur-md"
+
+[ai_directives]
+bilingual_mandate = "يجب دعم اللغتين العربية والإنجليزية دائماً وبشكل كامل في جميع المكونات والحقول ولوحة التحكم"
+dark_mode_mandate = "احترام ألوان الوضع الداكن التلقائي وعدم كتابة ألوان صلبة (hardcoded dark text on dark bg) تسبب تلف التباين"
+layout_responsive_mandate = "الحفاظ على تجاوب الهواتف (استخدام BottomNav في الجوال و Sidebar/Header في الكمبيوتر)"
+data_integrity_mandate = "عدم حذف أو تعديل بنية البيانات الأساسية في types.ts بدون تحديث المكونات والـ InitialData المتوافقة"
+code_modularity_mandate = "تقسيم الوظائف في مكونات وروافد (Hooks) مستقلة وعدم دمج كافة المنطق في ملف واحد"
+
+[execution_protocol]
+rule_1 = "لا تنفّذ الكود فوراً عند تلقي أي طلب تعديل أو ميزة جديدة."
+rule_2 = "أولاً: قدّم ملخصاً تنفيذياً وخطة عمل واضحة توضح التغييرات والأجزاء المتأثرة."
+rule_3 = "لا تنفّذ أي تعديل برمجي أو كتابة كود حتى يكتب المستخدم بشكل صريح: 'اعتمد التغيير' أو 'ابدأ' أو 'Start'."
+apply_globally = true

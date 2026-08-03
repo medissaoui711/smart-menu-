@@ -1,0 +1,56 @@
+name: التبليغ عن خطأ (Bug Report)
+description: أنشئ تقريراً لمساعدتنا في تحسين المشروع (Create a report to help us improve)
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        شكراً لأخذك الوقت للتبليغ عن هذا الخطأ! (Thanks for taking the time to fill out this bug report!)
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: وصف المشكلة (Bug Description)
+      description: يرجى تقديم وصف واضح وموجز للمشكلة. (A clear and concise description of what the bug is.)
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: خطوات التكرار (Steps To Reproduce)
+      description: ما هي الخطوات التي قمت بها والتي أدت إلى ظهور الخطأ؟ (Steps to reproduce the behavior)
+      value: |
+        1. اذهب إلى (Go to) '...'
+        2. انقر على (Click on) '....'
+        3. قم بالتمرير للأسفل لـ (Scroll down to) '....'
+        4. شاهد الخطأ (See error)
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: السلوك المتوقع (Expected Behavior)
+      description: وصف واضح لما كنت تتوقع حدوثه. (A clear and concise description of what you expected to happen.)
+    validations:
+      required: true
+  - type: input
+    id: device-os
+    attributes:
+      label: نظام التشغيل (OS)
+      description: مثل iOS, Android, Windows, macOS
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: المتصفح (Browser)
+      description: مثل Chrome, Safari, Firefox
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: سياق إضافي أو لقطات شاشة (Additional Context or Screenshots)
+      description: أضف أي سياق آخر حول المشكلة هنا، أو قم بإرفاق لقطات شاشة. (Add any other context about the problem here, or attach screenshots.)
+    validations:
+      required: false

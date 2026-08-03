@@ -1,0 +1,6 @@
+{
+  "name": "منيو تفاعلي | Interactive Smart Menu",
+  "description": "نظام المنيو الذكي التفاعلي للمطاعم والكافيهات مع السلة الحيّة والطلب المباشر عبر الواتساب ولوحة التحكم لتعديل الأسعار الأصناف وتوليد أكواد الـ QR للمطاعم",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

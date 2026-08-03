@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-main: #f8fafc;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Invert white and slate to create an automatic dark mode */
+      --color-white: #0f172a;
+      --color-slate-50: #1e293b;
+      --color-slate-100: #334155;
+      --color-slate-200: #475569;
+      --color-slate-300: #64748b;
+      --color-slate-400: #94a3b8;
+      --color-slate-500: #cbd5e1;
+      --color-slate-600: #e2e8f0;
+      --color-slate-700: #f1f5f9;
+      --color-slate-800: #f8fafc;
+      --color-slate-900: #ffffff;
+      --color-slate-950: #ffffff;
+      
+      --color-amber-50: #78350f;
+      --color-amber-100: #92400e;
+      --color-amber-200: #b45309;
+      --color-amber-700: #fde68a;
+      --color-amber-800: #fef3c7;
+      --color-amber-900: #fffbeb;
+
+      --color-emerald-50: #064e3b;
+      --color-emerald-100: #065f46;
+      --color-emerald-200: #047857;
+      --color-emerald-700: #a7f3d0;
+      --color-emerald-800: #d1fae5;
+      --color-emerald-900: #ecfdf5;
+
+      --color-sky-50: #0c4a6e;
+      --color-sky-100: #075985;
+      --color-sky-200: #0369a1;
+      --color-sky-700: #bae6fd;
+      --color-sky-800: #e0f2fe;
+      --color-sky-900: #f0f9ff;
+
+      --color-purple-50: #581c87;
+      --color-purple-100: #6b21a8;
+      --color-purple-200: #7e22ce;
+      --color-purple-700: #e9d5ff;
+      --color-purple-800: #f3e8ff;
+      --color-purple-900: #faf5ff;
+
+      --color-red-50: #7f1d1d;
+      --color-red-100: #991b1b;
+      --color-red-200: #b91c1c;
+      --color-red-700: #fecaca;
+      --color-red-800: #fee2e2;
+      --color-red-900: #fef2f2;
+      
+      /* Invert shadows slightly or adjust them for Neo-Brutalism */
+      --tw-shadow-color: rgba(255, 255, 255, 0.05);
+      
+      --bg-main: #0f172a;
+    }
+  }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--color-slate-900);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* Custom scrollbar for horizontal category scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+
+
