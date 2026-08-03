@@ -32,6 +32,7 @@ interface MobileSidebarDrawerProps {
   onOpenQrGenerator: () => void;
   cartItemsCount: number;
   tableNumber: string | null;
+  appMode?: 'customer' | 'admin';
 }
 
 export const MobileSidebarDrawer: React.FC<MobileSidebarDrawerProps> = ({
@@ -48,8 +49,10 @@ export const MobileSidebarDrawer: React.FC<MobileSidebarDrawerProps> = ({
   onOpenQrGenerator,
   cartItemsCount,
   tableNumber,
+  appMode = 'customer',
 }) => {
   const isAr = lang === 'ar';
+  const isAdminMode = appMode === 'admin';
 
   return (
     <AnimatePresence>
@@ -196,47 +199,52 @@ export const MobileSidebarDrawer: React.FC<MobileSidebarDrawerProps> = ({
                 </div>
               </button>
 
-              {/* QR Stand Generator Screen Card */}
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  onOpenQrGenerator();
-                }}
-                className="p-3 rounded-2xl bg-white border border-slate-200/90 text-slate-800 hover:bg-slate-100 transition flex flex-col justify-between gap-2 shadow-2xs active:scale-98 cursor-pointer"
-              >
-                <div className="flex items-center justify-between w-full">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                    <QrCode className="w-5 h-5" />
-                  </div>
-                  {isAr ? <ChevronLeft className="w-4 h-4 opacity-60" /> : <ChevronRight className="w-4 h-4 opacity-60" />}
-                </div>
-                <div>
-                  <h3 className="font-bold text-xs">{isAr ? 'استندات QR' : 'QR Stand'}</h3>
-                  <p className="text-[10px] text-slate-500 font-normal">{isAr ? 'رمز الطاولات والطباعة' : 'Table Stands'}</p>
-                </div>
-              </button>
+              {/* Admin Mode Cards (Only shown if admin) */}
+              {isAdminMode && (
+                <>
+                  {/* QR Stand Generator Screen Card */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onOpenQrGenerator();
+                    }}
+                    className="p-3 rounded-2xl bg-white border border-slate-200/90 text-slate-800 hover:bg-slate-100 transition flex flex-col justify-between gap-2 shadow-2xs active:scale-98 cursor-pointer"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                        <QrCode className="w-5 h-5" />
+                      </div>
+                      {isAr ? <ChevronLeft className="w-4 h-4 opacity-60" /> : <ChevronRight className="w-4 h-4 opacity-60" />}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-xs">{isAr ? 'استندات QR' : 'QR Stand'}</h3>
+                      <p className="text-[10px] text-slate-500 font-normal">{isAr ? 'رمز الطاولات والطباعة' : 'Table Stands'}</p>
+                    </div>
+                  </button>
 
-              {/* Admin Panel Screen Card */}
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  onOpenAdmin();
-                }}
-                className="p-3 rounded-2xl bg-white border border-slate-200/90 text-slate-800 hover:bg-slate-100 transition flex flex-col justify-between gap-2 shadow-2xs active:scale-98 cursor-pointer"
-              >
-                <div className="flex items-center justify-between w-full">
-                  <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
-                    <Settings className="w-5 h-5" />
-                  </div>
-                  {isAr ? <ChevronLeft className="w-4 h-4 opacity-60" /> : <ChevronRight className="w-4 h-4 opacity-60" />}
-                </div>
-                <div>
-                  <h3 className="font-bold text-xs">{isAr ? 'إدارة المنيو' : 'Admin Panel'}</h3>
-                  <p className="text-[10px] text-slate-500 font-normal">{isAr ? 'تعديل الأطباق والأسعار' : 'Manage Items'}</p>
-                </div>
-              </button>
+                  {/* Admin Panel Screen Card */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onOpenAdmin();
+                    }}
+                    className="p-3 rounded-2xl bg-white border border-slate-200/90 text-slate-800 hover:bg-slate-100 transition flex flex-col justify-between gap-2 shadow-2xs active:scale-98 cursor-pointer"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                        <Settings className="w-5 h-5" />
+                      </div>
+                      {isAr ? <ChevronLeft className="w-4 h-4 opacity-60" /> : <ChevronRight className="w-4 h-4 opacity-60" />}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-xs">{isAr ? 'إدارة المنيو' : 'Admin Panel'}</h3>
+                      <p className="text-[10px] text-slate-500 font-normal">{isAr ? 'تعديل الأطباق والأسعار' : 'Manage Items'}</p>
+                    </div>
+                  </button>
+                </>
+              )}
             </div>
           </div>
 

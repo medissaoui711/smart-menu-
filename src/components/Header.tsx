@@ -12,6 +12,8 @@ interface HeaderProps {
   searchQuery: string;
   onSearchChange: (q: string) => void;
   tableNumber: string | null;
+  appMode?: 'customer' | 'admin';
+  onLogoClick?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -24,8 +26,11 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery,
   onSearchChange,
   tableNumber,
+  appMode = 'customer',
+  onLogoClick,
 }) => {
   const isAr = lang === 'ar';
+  const isAdminMode = appMode === 'admin';
 
   return (
     <header className="bg-white border-b border-slate-200 shadow-2xs">
@@ -57,12 +62,16 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Main Header Info */}
       <div className="max-w-4xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-3">
-          {/* Logo & Name */}
-          <div className="flex items-center gap-3">
+          {/* Logo & Name - Double tap logo triggers PIN modal */}
+          <div 
+            onClick={onLogoClick} 
+            className="flex items-center gap-3 cursor-pointer select-none group"
+            title={isAr ? 'نقرتان للموظفين والإدارة' : 'Double tap for admin login'}
+          >
             <img
               src={config.logoUrl}
               alt={config.nameAr}
-              className="w-13 h-13 rounded-2xl object-cover border border-amber-200 shadow-xs"
+              className="w-13 h-13 rounded-2xl object-cover border border-amber-200 shadow-xs group-active:scale-95 transition"
             />
             <div>
               <div className="flex items-center gap-1.5">
@@ -94,25 +103,29 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={onOpenQrGenerator}
-              className="hidden md:flex p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-600 text-slate-700 transition items-center gap-1.5 text-xs font-semibold cursor-pointer"
-              title={isAr ? 'توليد واستندات QR' : 'QR Stands'}
-            >
-              <QrCode className="w-4 h-4 text-amber-600" />
-              <span>{isAr ? 'استندات QR' : 'QR Stands'}</span>
-            </button>
+            {isAdminMode && (
+              <>
+                <button
+                  type="button"
+                  onClick={onOpenQrGenerator}
+                  className="hidden md:flex p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-600 text-slate-700 transition items-center gap-1.5 text-xs font-semibold cursor-pointer"
+                  title={isAr ? 'توليد واستندات QR' : 'QR Stands'}
+                >
+                  <QrCode className="w-4 h-4 text-amber-600" />
+                  <span>{isAr ? 'استندات QR' : 'QR Stands'}</span>
+                </button>
 
-            <button
-              type="button"
-              onClick={onOpenAdmin}
-              className="hidden md:flex p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white transition items-center gap-1.5 text-xs font-semibold cursor-pointer shadow-xs"
-              title={isAr ? 'لوحة التحكم' : 'Admin Panel'}
-            >
-              <Settings className="w-4 h-4" />
-              <span>{isAr ? 'لوحة التحكم' : 'Admin'}</span>
-            </button>
+                <button
+                  type="button"
+                  onClick={onOpenAdmin}
+                  className="hidden md:flex p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white transition items-center gap-1.5 text-xs font-semibold cursor-pointer shadow-xs"
+                  title={isAr ? 'لوحة التحكم' : 'Admin Panel'}
+                >
+                  <Settings className="w-4 h-4" />
+                  <span>{isAr ? 'لوحة التحكم' : 'Admin'}</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
 

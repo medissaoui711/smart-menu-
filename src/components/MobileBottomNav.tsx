@@ -7,6 +7,7 @@ interface MobileBottomNavProps {
   onTabSelect: (tab: 'home' | 'search' | 'cart' | 'menu' | 'qr') => void;
   cartItemsCount: number;
   lang: Language;
+  appMode?: 'customer' | 'admin';
 }
 
 interface NavTab {
@@ -22,10 +23,12 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   onTabSelect,
   cartItemsCount,
   lang,
+  appMode = 'customer',
 }) => {
   const isAr = lang === 'ar';
+  const isAdminMode = appMode === 'admin';
 
-  const navItems: NavTab[] = [
+  const allNavItems: NavTab[] = [
     {
       id: 'home',
       labelAr: 'الرئيسية',
@@ -53,11 +56,17 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     },
     {
       id: 'menu',
-      labelAr: 'الشاشات',
-      labelEn: 'Menu & Apps',
+      labelAr: 'الأقسام',
+      labelEn: 'Categories',
       icon: LayoutGrid,
     },
   ];
+
+  // In customer mode, hide the QR Stand tab for clean UX
+  const navItems = allNavItems.filter((item) => {
+    if (item.id === 'qr' && !isAdminMode) return false;
+    return true;
+  });
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-[0_-8px_20px_rgba(0,0,0,0.06)] md:hidden no-print pb-safe">
