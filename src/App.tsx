@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, lazy, Suspense } from 'react';
 import { useMenuState } from './hooks/useMenuState';
 import { useLanguage } from './hooks/useLanguage';
 import { useAppNavigation } from './hooks/useAppNavigation';
@@ -9,20 +9,32 @@ import { Header } from './components/Header';
 import { CategoryNav } from './components/CategoryNav';
 import { MenuContent } from './components/MenuContent';
 import { AppFooter } from './components/AppFooter';
-import { ItemModal } from './components/ItemModal';
-import { CartDrawer } from './components/CartDrawer';
 import { FloatingCartButton } from './components/FloatingCartButton';
-import { AdminPanel } from './components/AdminPanel';
-import { QrStandGenerator } from './components/QrStandGenerator';
-import { OrderSuccessModal } from './components/OrderSuccessModal';
 import { PWAInstallBanner } from './components/PWAInstallBanner';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { MobileSidebarDrawer } from './components/MobileSidebarDrawer';
 import { SEO } from './components/SEO';
 import { AdminBar } from './components/AdminBar';
 import { AdminLoginModal } from './components/AdminLoginModal';
-import InfoModal from './components/InfoModal';
 import { getFaqContent, getPrivacyContent, getTermsContent } from './data/policies';
+
+// Lazy-loaded heavy components
+const ItemModal = lazy(() => import('./components/ItemModal').then(m => ({ default: m.ItemModal })));
+const CartDrawer = lazy(() => import('./components/CartDrawer').then(m => ({ default: m.CartDrawer })));
+const AdminPanel = lazy(() => import('./components/AdminPanel').then(m => ({ default: m.AdminPanel })));
+const QrStandGenerator = lazy(() => import('./components/QrStandGenerator').then(m => ({ default: m.QrStandGenerator })));
+const OrderSuccessModal = lazy(() => import('./components/OrderSuccessModal').then(m => ({ default: m.OrderSuccessModal })));
+const InfoModal = lazy(() => import('./components/InfoModal'));
+
+// Loading Fallback Component
+const LazyFallback = () => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/30 backdrop-blur-xs">
+    <div className="bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3">
+      <div className="w-6 h-6 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+      <span className="text-xs font-bold text-slate-700">جاري التحميل...</span>
+    </div>
+  </div>
+);
 
 export default function App() {
   const {
@@ -196,104 +208,107 @@ export default function App() {
         <AppFooter config={config} isAr={isAr} setInfoModalType={setInfoModalType} />
       </main>
 
-      {/* Info Modals (FAQ, Privacy, Terms) */}
-      <InfoModal
-        isOpen={infoModalType !== null}
-        onClose={() => setInfoModalType(null)}
-        lang={lang}
-        title={
-          infoModalType === 'faq' ? (isAr ? 'الأسئلة الشائعة' : 'FAQ') :
-          infoModalType === 'privacy' ? (isAr ? 'سياسة الخصوصية' : 'Privacy Policy') :
-          infoModalType === 'terms' ? (isAr ? 'شروط الاستخدام' : 'Terms of Use') : ''
-        }
-        content={
-          infoModalType === 'faq' ? (
-            <div className="space-y-6">
-              {getFaqContent(lang).map((item, idx) => (
-                <div key={idx}>
-                  <h4 className="font-bold text-slate-800 mb-1">{item.q}</h4>
-                  <p className="text-slate-600 text-sm">{item.a}</p>
+      {/* Lazy Loaded Components Wrapped in Suspense */}
+      <Suspense fallback={<LazyFallback />}>
+        {/* Info Modals (FAQ, Privacy, Terms) */}
+        {infoModalType !== null && (
+          <InfoModal
+            isOpen={infoModalType !== null}
+            onClose={() => setInfoModalType(null)}
+            lang={lang}
+            title={
+              infoModalType === 'faq' ? (isAr ? 'الأسئلة الشائعة' : 'FAQ') :
+              infoModalType === 'privacy' ? (isAr ? 'سياسة الخصوصية' : 'Privacy Policy') :
+              infoModalType === 'terms' ? (isAr ? 'شروط الاستخدام' : 'Terms of Use') : ''
+            }
+            content={
+              infoModalType === 'faq' ? (
+                <div className="space-y-6">
+                  {getFaqContent(lang).map((item, idx) => (
+                    <div key={idx}>
+                      <h4 className="font-bold text-slate-800 mb-1">{item.q}</h4>
+                      <p className="text-slate-600 text-sm">{item.a}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          ) : infoModalType === 'privacy' ? (
-            <div className="whitespace-pre-line text-sm">{getPrivacyContent(lang)}</div>
-          ) : infoModalType === 'terms' ? (
-            <div className="whitespace-pre-line text-sm">{getTermsContent(lang)}</div>
-          ) : null
-        }
-      />
+              ) : infoModalType === 'privacy' ? (
+                <div className="whitespace-pre-line text-sm">{getPrivacyContent(lang)}</div>
+              ) : infoModalType === 'terms' ? (
+                <div className="whitespace-pre-line text-sm">{getTermsContent(lang)}</div>
+              ) : null
+            }
+          />
+        )}
 
-      {/* Floating Bottom Cart Bar */}
-      <FloatingCartButton
-        items={cartItems}
-        config={config}
-        lang={lang}
-        onOpenCart={handleOpenCart}
-      />
+        {/* Item Detail / Option Selector Modal */}
+        {selectedItemForModal && (
+          <ItemModal
+            item={selectedItemForModal}
+            config={config}
+            lang={lang}
+            onClose={() => setSelectedItemForModal(null)}
+            onAddToCartWithOptions={handleAddToCartWithOptions}
+          />
+        )}
 
-      {/* Item Detail / Option Selector Modal */}
-      <ItemModal
-        item={selectedItemForModal}
-        config={config}
-        lang={lang}
-        onClose={() => setSelectedItemForModal(null)}
-        onAddToCartWithOptions={handleAddToCartWithOptions}
-      />
+        {/* Live Cart & WhatsApp Checkout Drawer */}
+        {isCartOpen && (
+          <CartDrawer
+            isOpen={isCartOpen}
+            onClose={handleCloseCart}
+            items={cartItems}
+            config={config}
+            lang={lang}
+            onUpdateQuantity={handleUpdateQuantity}
+            onRemoveItem={handleRemoveCartItem}
+            onClearCart={handleClearCart}
+            defaultTableNumber={tableNumberFromUrl}
+            onOrderSent={handleOrderSentSuccess}
+          />
+        )}
 
-      {/* Live Cart & WhatsApp Checkout Drawer */}
-      <CartDrawer
-        isOpen={isCartOpen}
-        onClose={handleCloseCart}
-        items={cartItems}
-        config={config}
-        lang={lang}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveCartItem}
-        onClearCart={handleClearCart}
-        defaultTableNumber={tableNumberFromUrl}
-        onOrderSent={handleOrderSentSuccess}
-      />
+        {/* Admin Panel Control View */}
+        {appMode === 'admin' && isAdminOpen && (
+          <AdminPanel
+            isOpen={isAdminOpen}
+            onClose={() => setIsAdminOpen(false)}
+            config={config}
+            onUpdateConfig={setConfig}
+            categories={categories}
+            onUpdateCategories={setCategories}
+            menuItems={menuItems}
+            onUpdateMenuItems={setMenuItems}
+            lang={lang}
+            onResetToDefaults={handleResetToDefaults}
+          />
+        )}
 
-      {/* Admin Panel Control View (Component Guarding - ONLY loaded in Admin mode) */}
-      {appMode === 'admin' && (
-        <AdminPanel
-          isOpen={isAdminOpen}
-          onClose={() => setIsAdminOpen(false)}
-          config={config}
-          onUpdateConfig={setConfig}
-          categories={categories}
-          onUpdateCategories={setCategories}
-          menuItems={menuItems}
-          onUpdateMenuItems={setMenuItems}
-          lang={lang}
-          onResetToDefaults={handleResetToDefaults}
-        />
-      )}
+        {/* Printable QR Code Table Stand Generator */}
+        {appMode === 'admin' && isQrGeneratorOpen && (
+          <QrStandGenerator
+            isOpen={isQrGeneratorOpen}
+            onClose={() => setIsQrGeneratorOpen(false)}
+            config={config}
+            lang={lang}
+          />
+        )}
 
-      {/* Printable QR Code Table Stand Generator (Component Guarding) */}
-      {appMode === 'admin' && (
-        <QrStandGenerator
-          isOpen={isQrGeneratorOpen}
-          onClose={() => setIsQrGeneratorOpen(false)}
-          config={config}
-          lang={lang}
-        />
-      )}
+        {/* WhatsApp Order Sent Success Modal */}
+        {isSuccessModalOpen && (
+          <OrderSuccessModal
+            isOpen={isSuccessModalOpen}
+            onClose={() => setIsSuccessModalOpen(false)}
+            config={config}
+            lang={lang}
+          />
+        )}
+      </Suspense>
 
       {/* Admin PIN Login Modal */}
       <AdminLoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onLogin={login}
-        lang={lang}
-      />
-
-      {/* WhatsApp Order Sent Success Modal */}
-      <OrderSuccessModal
-        isOpen={isSuccessModalOpen}
-        onClose={() => setIsSuccessModalOpen(false)}
-        config={config}
         lang={lang}
       />
 

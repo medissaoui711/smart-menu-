@@ -310,7 +310,7 @@ export const MobileSidebarDrawer: React.FC<MobileSidebarDrawerProps> = ({
             </div>
             <div className="flex items-center gap-2 font-medium text-slate-700">
               <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span dir="ltr">{config.whatsappNumber}</span>
+              <span dir="ltr">{config.whatsappPhone}</span>
             </div>
           </div>
         </div>

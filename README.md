@@ -10,6 +10,10 @@
     <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
     <img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest" />
   </p>
+
+  <br />
+
+  <img src="./assets/screenshot.jpg" alt="Smart Restaurant Menu Preview | معاينة المنيو الذكي" width="850" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.12);" />
 </div>
 
 <hr />

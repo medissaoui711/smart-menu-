@@ -102,9 +102,9 @@ export const ItemModal: React.FC<ItemModalProps> = ({
           />
 
           <motion.div 
-            initial={{ y: "100%", sm: { y: 20, scale: 0.95 }, opacity: 0 }}
-            animate={{ y: 0, sm: { y: 0, scale: 1 }, opacity: 1 }}
-            exit={{ y: "100%", sm: { y: 20, scale: 0.95 }, opacity: 0 }}
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "100%", opacity: 0 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
